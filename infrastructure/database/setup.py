@@ -4,12 +4,12 @@ from tgbot.config import DbConfig
 from infrastructure.database.models.base import Base
 
 
-def create_engine(db: DbConfig, echo=False):
+def create_postgres_engine(db: DbConfig, echo=False):
     engine = create_async_engine(
-        db.construct_sqlite_url("database.db"),
+        db.construct_sqlalchemy_url(),
         query_cache_size=1200,
-        #pool_size=20,
-        #max_overflow=200,
+        pool_size=20,
+        max_overflow=200,
         future=True,
         echo=echo,
     )

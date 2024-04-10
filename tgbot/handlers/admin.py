@@ -1,9 +1,9 @@
 from aiogram import Router
-from aiogram.filters import CommandStart, Command, CommandObject
-from aiogram.types import Message
+from aiogram.filters import Command, CommandObject
+from aiogram.types import Message, ErrorEvent
 
-from tgbot.filters.admin import AdminFilter
 from infrastructure.database.repo.requests import RequestsRepo
+from tgbot.filters.admin import AdminFilter
 
 admin_router = Router()
 admin_router.message.filter(AdminFilter())

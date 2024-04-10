@@ -4,13 +4,14 @@ redis
 betterlogging
 aiosqlite
 sqlalchemy
+aiogram_dialog
+seaborn
+pandas
+influxdb-client
 
-# # For enabling api:
-# backoff
-# ujson
-# yarl
+sqlalchemy~=2.0
+alembic~=1.0
+asyncpg
 
-# # For PostgreSQL sqlalchemy + alembic:
-# sqlalchemy~=2.0
-# alembic~=1.0
-# asyncpg
+typing_extensions
+matplotlib

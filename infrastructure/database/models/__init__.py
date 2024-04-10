@@ -1,2 +1,2 @@
 from .base import Base
-from .users import User, Profile, Group
+from .users import User

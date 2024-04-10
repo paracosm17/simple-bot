@@ -61,9 +61,14 @@ venv.bak/
 .pyre/
 .idea/
 .env
-cache/
+redis_cache/
 
 # Database
 *.db
 *.sqlite
 *.sqlite3
+
+# Project
+cache/
+grafana-data/
+tmp/

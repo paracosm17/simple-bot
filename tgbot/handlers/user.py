@@ -9,7 +9,7 @@ user_router = Router()
 
 @user_router.message(CommandStart())
 async def user_start(message: Message):
-    await message.reply("Здарова, корова")
+    await message.reply(f"Привет, {message.from_user.full_name}")
 
 
 @user_router.message(Command("id"))
