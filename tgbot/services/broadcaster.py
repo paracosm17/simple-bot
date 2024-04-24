@@ -31,8 +31,10 @@ async def send_message(
         return await send_message(
             bot, user_id, text, disable_notification, reply_markup
         )
-    except exceptions.TelegramAPIError:
-        logging.exception(f"Target [ID:{user_id}]: failed")
+    except exceptions.TelegramBadRequest as e:
+        logging.error(f"Target [ID:{user_id}]: failed - {e.message}")
+    except exceptions.TelegramAPIError as e:
+        logging.error(f"Target [ID:{user_id}]: failed - {e.message}")
     else:
         logging.info(f"Target [ID:{user_id}]: success")
         return True
@@ -84,8 +86,10 @@ async def send_message_by_copy(
         )
         await asyncio.sleep(e.retry_after)
         return await send_message_by_copy(bot, user_id, from_user_id, message_id, reply_markup)
-    except exceptions.TelegramAPIError:
-        logging.exception(f"Target [ID:{user_id}]: failed")
+    except exceptions.TelegramBadRequest as e:
+        logging.error(f"Target [ID:{user_id}]: failed - {e.message}")
+    except exceptions.TelegramAPIError as e:
+        logging.error(f"Target [ID:{user_id}]: failed - {e.message}")
     else:
         logging.info(f"Target [ID:{user_id}]: success")
         return True

@@ -77,29 +77,41 @@ class UserRepo(BaseRepo):
             return False
         return True
 
-    async def users_count(self) -> int:
-        users = await self.session.execute(select(func.count()).select_from(User))
+    async def users_count(self, only_active: bool = False) -> int:
+        users_query = select(func.count()).select_from(User)
+
+        if only_active:
+            users_query = users_query.where(User.active==True)
+
+        users = await self.session.execute(users_query)
         return users.scalar()
 
-    async def get_active_users(self, count: int, random: bool = True):
+    async def get_active_users(self, count: int | None = None, random: bool = True):
+        users_query = select(User.user_id).where(User.active == True)
+
         if random:
-            users = await self.session.execute(
-                select(User.user_id).where(User.active == True).order_by(func.random()).limit(count)
-            )
+            users_query = users_query.order_by(func.random())
         else:
-            users = await self.session.execute(
-                select(User.user_id).where(User.active == True).order_by(User.created_at.desc()).limit(count)
-            )
+            users_query = users_query.order_by(User.created_at.desc())
+
+        if count:
+            users_query = users_query.limit(count)
+
+        users = await self.session.execute(users_query)
         return users.scalars().all()
 
-    async def get_new_users_today(self) -> int:
-        result = await self.session.execute(select(User).filter(
-            func.date(User.created_at) == date.today())
+    async def get_new_users_count_by_days(self, days: int) -> int:
+        users = await self.session.execute(
+            select(func.count()).select_from(User).filter(
+                func.date(User.created_at) > date.today() - timedelta(days=days)
+            )
         )
-        return len(result.scalars().all())
+        return users.scalar()
 
-    async def get_new_users_last_7_days(self) -> int:
-        result = await self.session.execute(select(User).filter(
-            func.date(User.created_at) > date.today() - timedelta(days=7))
+    async def get_last_active_users_count_by_days(self, days: int) -> int:
+        users = await self.session.execute(
+            select(func.count()).select_from(User).filter(
+                func.date(User.last_active) > date.today() - timedelta(days=days)
+            )
         )
-        return len(result.scalars().all())
+        return users.scalar()

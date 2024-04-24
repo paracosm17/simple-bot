@@ -16,7 +16,9 @@ broadcast_router = Router()
 
 @broadcast_router.message(Command("broadcast"))
 async def start_broadcast(message: Message, dialog_manager: DialogManager, repo: RequestsRepo):
-    await dialog_manager.start(BroadcastStates.count_state, data={"users_count": await repo.users.users_count()}, )
+    await dialog_manager.start(BroadcastStates.count_state, data={
+        "users_count": await repo.users.users_count(only_active=True)
+    })
 
 
 async def count_input(m: Message, mi: MessageInput, d: DialogManager):
@@ -58,7 +60,8 @@ async def message_input(m: Message, mi: MessageInput, d: DialogManager):
 
 
 async def send_messages(c: CallbackQuery, b: Button, d: DialogManager):
-    await c.message.answer("Запускаю рассылку...")
+    await c.message.answer(f"Запускаю рассылку...\n{d.dialog_data['users_to_send_count']} людей. "
+                           f"Рандомные: {bool(d.dialog_data.get('random'))}")
     repo: RequestsRepo = d.middleware_data["repo"]
     count = await broadcast_by_copy(c.bot,
                                     await repo.users.get_active_users(

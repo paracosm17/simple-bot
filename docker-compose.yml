@@ -23,7 +23,7 @@ services:
 
     depends_on:
       - postgres
-      - grafana
+#      - grafana
       - redis
 
   postgres:
@@ -61,28 +61,28 @@ services:
     volumes:
       - ./cache:/data
 
-  grafana:
-    image: grafana/grafana
-    container_name: "${BOT_NAME}_grafana"
-    volumes:
-        - grafana-data:/var/lib/grafana
-        - ./grafana.ini:/etc/grafana/grafana.ini
-    environment:
-        - GF_DATE_FORMATS_DEFAULT_TIMEZONE=browser
-    ports:
-        - "3000:3000"
-    env_file:
-      - ".env"
-    depends_on:
-      - postgres
+#  grafana:
+#    image: grafana/grafana
+#    container_name: "${BOT_NAME}_grafana"
+#    volumes:
+#        - grafana-data:/var/lib/grafana
+#        - ./grafana.ini:/etc/grafana/grafana.ini
+#    environment:
+#        - GF_DATE_FORMATS_DEFAULT_TIMEZONE=browser
+#    ports:
+#        - "3000:3000"
+#    env_file:
+#      - ".env"
+#    depends_on:
+#      - postgres
 
-  dozzle:
-    container_name: "${BOT_NAME}_dozzle"
-    image: amir20/dozzle:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 8080:8080
+#  dozzle:
+#    container_name: "${BOT_NAME}_dozzle"
+#    image: amir20/dozzle:latest
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    ports:
+#      - 8080:8080
 
 # TODO: Setup NGINX ./nginx/nginx.conf
 #  nginx:
@@ -99,4 +99,4 @@ services:
 volumes:
   pgdata: { }
   cache: { }
-  grafana-data: { }
+#  grafana-data: { }
